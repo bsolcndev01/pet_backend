@@ -1,0 +1,167 @@
+/* src/assets/css/global.css */
+/* 基础变量与重置 */
+:root {
+  --brand: #2563eb;
+  --brand-2: #1d4ed8;
+  --accent: #10b981;
+  --text-1: #111827;
+  --text-2: #374151;
+  --text-3: #6b7280;
+  --border: #e5e7eb;
+  --bg: #f5f7fb;
+  --card-bg: #fff;
+  --radius-lg: 12px;
+  --radius-md: 10px;
+  --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+}
+
+:root[data-theme='dark'] {
+  --brand: #60a5fa;
+  --brand-2: #3b82f6;
+  --accent: #34d399;
+  --text-1: #e5e7eb;
+  --text-2: #cbd5e1;
+  --text-3: #94a3b8;
+  --border: #1f2937;
+  --bg: #0b1324;
+  --card-bg: #0f172a;
+  --shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  font-family: "Inter", "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: var(--text-1);
+  background-color: var(--bg);
+}
+
+/* 通用样式 */
+#app {
+  height: 100%;
+}
+
+/* 统一卡片风格 */
+.el-card {
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  background: var(--card-bg);
+}
+
+.el-card__header {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--text-1);
+}
+
+.el-card__body {
+  padding: 16px 20px;
+}
+
+.page-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-1);
+}
+
+/* 清除浮动 */
+.clearfix::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* 通用间距 */
+.mt-1 {
+  margin-top: 8px;
+}
+.mt-2 {
+  margin-top: 16px;
+}
+.mt-3 {
+  margin-top: 24px;
+}
+.mt-4 {
+  margin-top: 32px;
+}
+
+.ml-1 {
+  margin-left: 8px;
+}
+.ml-2 {
+  margin-left: 16px;
+}
+
+/* 自定义滚动条 */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* 适配Element Plus的全局样式 */
+.el-container {
+  height: 100%;
+}
+
+.el-menu {
+  border-right: none;
+  background-color: #409eff;
+  color: #ffffff;
+  --el-menu-text-color: #ffffff;
+  --el-menu-hover-text-color: #eaf2ff;
+  --el-menu-active-color: #ffffff;
+  --el-menu-hover-bg-color: rgba(255, 255, 255, 0.12);
+}
+
+/* 统一页面容器与卡片标题样式（除首页外使用这些类） */
+.page-container,
+.pet-detail-container,
+.edit-pet-container,
+.add-appointment-container,
+.appointment-container,
+.reminder-container,
+.add-pet-container,
+.page-card,
+.health-records-container,
+.appointment-list-container {
+  padding: 20px;
+  background: var(--bg);
+}
+
+.card-title {
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--text-1);
+}
+
+.toolbar,
+.page-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
