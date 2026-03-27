@@ -186,7 +186,7 @@ const handleForgot = () => {
 .login-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.3);
   z-index: 1;
 }
 

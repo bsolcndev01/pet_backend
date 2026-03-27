@@ -1,4 +1,4 @@
-name: Deploy To Server
+name: Deploy With Docker
 
 on:
   push:
@@ -10,19 +10,6 @@ on:
         description: Docker image tag to deploy
         required: false
         default: latest
-      server_host:
-        description: Server host (optional, fallback to secrets/vars)
-        required: false
-      server_port:
-        description: Server SSH port (optional, default 22)
-        required: false
-        default: "22"
-      server_user:
-        description: Server SSH user (optional, fallback to secrets/vars)
-        required: false
-      server_app_dir:
-        description: App directory on server (optional, fallback to secrets/vars)
-        required: false
 
 concurrency:
   group: deploy-production
@@ -30,54 +17,41 @@ concurrency:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux]
     env:
       IMAGE_TAG: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.image_tag || 'latest' }}
-      DEPLOY_HOST: ${{ github.event.inputs.server_host || secrets.SERVER_HOST || secrets.SSH_HOST || vars.SERVER_HOST || vars.SSH_HOST }}
-      DEPLOY_PORT: ${{ github.event.inputs.server_port || secrets.SERVER_PORT || secrets.SSH_PORT || vars.SERVER_PORT || vars.SSH_PORT || '22' }}
-      DEPLOY_USER: ${{ github.event.inputs.server_user || secrets.SERVER_USER || secrets.SSH_USER || vars.SERVER_USER || vars.SSH_USER }}
-      DEPLOY_APP_DIR: ${{ github.event.inputs.server_app_dir || secrets.SERVER_APP_DIR || vars.SERVER_APP_DIR }}
-      DEPLOY_KEY: ${{ secrets.SERVER_SSH_KEY || secrets.SSH_PRIVATE_KEY || secrets.SSH_KEY }}
     steps:
-      - name: Validate deploy settings
-        run: |
-          set -euo pipefail
-          [ -n "${DEPLOY_HOST}" ] || { echo "Missing server host. Set workflow input 'server_host' or secret 'SERVER_HOST'."; exit 1; }
-          [ -n "${DEPLOY_USER}" ] || { echo "Missing server user. Set workflow input 'server_user' or secret 'SERVER_USER'."; exit 1; }
-          [ -n "${DEPLOY_APP_DIR}" ] || { echo "Missing server app dir. Set workflow input 'server_app_dir' or secret 'SERVER_APP_DIR'."; exit 1; }
-          [ -n "${DEPLOY_KEY}" ] || { echo "Missing SSH key. Set secret 'SERVER_SSH_KEY'."; exit 1; }
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Deploy on server via SSH
-        uses: appleboy/ssh-action@v1.2.0
+      - name: Validate docker secrets
         env:
-          IMAGE_TAG: ${{ env.IMAGE_TAG }}
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
-          SERVER_APP_DIR: ${{ env.DEPLOY_APP_DIR }}
-        with:
-          host: ${{ env.DEPLOY_HOST }}
-          username: ${{ env.DEPLOY_USER }}
-          key: ${{ env.DEPLOY_KEY }}
-          port: ${{ env.DEPLOY_PORT }}
-          script_stop: true
-          envs: IMAGE_TAG,DOCKERHUB_USERNAME,DOCKERHUB_TOKEN,SERVER_APP_DIR
-          script: |
-            set -euo pipefail
+        run: |
+          set -euo pipefail
+          [ -n "${DOCKERHUB_USERNAME}" ] || { echo "Missing secret: DOCKERHUB_USERNAME"; exit 1; }
+          [ -n "${DOCKERHUB_TOKEN}" ] || { echo "Missing secret: DOCKERHUB_TOKEN"; exit 1; }
 
-            cd "$SERVER_APP_DIR"
+      - name: Pull and restart containers
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+        run: |
+          set -euo pipefail
 
-            if [ ! -f .env.prod ]; then
-              cp .env.prod.example .env.prod
-            fi
+          if [ ! -f .env.prod ]; then
+            cp .env.prod.example .env.prod
+          fi
 
-            echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+          echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
 
-            BACKEND_IMAGE="$DOCKERHUB_USERNAME/pet-backend:$IMAGE_TAG" \
-            FRONTEND_IMAGE="$DOCKERHUB_USERNAME/pet-frontend:$IMAGE_TAG" \
-            docker compose --env-file .env.prod -f docker-compose.prod.yml pull
+          BACKEND_IMAGE="$DOCKERHUB_USERNAME/pet-backend:$IMAGE_TAG" \
+          FRONTEND_IMAGE="$DOCKERHUB_USERNAME/pet-frontend:$IMAGE_TAG" \
+          docker compose --env-file .env.prod -f docker-compose.prod.yml pull
 
-            BACKEND_IMAGE="$DOCKERHUB_USERNAME/pet-backend:$IMAGE_TAG" \
-            FRONTEND_IMAGE="$DOCKERHUB_USERNAME/pet-frontend:$IMAGE_TAG" \
-            docker compose --env-file .env.prod -f docker-compose.prod.yml up -d --remove-orphans
+          BACKEND_IMAGE="$DOCKERHUB_USERNAME/pet-backend:$IMAGE_TAG" \
+          FRONTEND_IMAGE="$DOCKERHUB_USERNAME/pet-frontend:$IMAGE_TAG" \
+          docker compose --env-file .env.prod -f docker-compose.prod.yml up -d --remove-orphans
 
-            docker image prune -f
+          docker image prune -f

@@ -2,7 +2,7 @@
   <rect width="1600" height="900" fill="#EAF2F8"/>
 
   <!-- Soft circles -->
-  <g opacity="0.32" fill="none" stroke="#ACCADD" stroke-width="2">
+  <g opacity="0.22" fill="none" stroke="#C9DDEB" stroke-width="2">
     <circle cx="220" cy="180" r="130"/>
     <circle cx="1420" cy="160" r="150"/>
     <circle cx="1320" cy="760" r="190"/>
@@ -10,10 +10,10 @@
   </g>
 
   <!-- Logo-style pet badges (clear, larger) -->
-  <g fill="none" stroke="#6FA3C5" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity="0.85">
+  <g fill="none" stroke="#8FBAD3" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" opacity="0.6">
     <!-- Dog badge -->
     <g transform="translate(360,260)">
-      <circle cx="0" cy="0" r="64" fill="#F7FBFF" stroke="#ACCADD"/>
+      <circle cx="0" cy="0" r="64" fill="#F9FCFF" stroke="#C9DDEB"/>
       <circle cx="0" cy="0" r="32"/>
       <path d="M-36 -2c-16-10-20-30-8-46 12 6 22 20 26 38"/>
       <path d="M36 -2c16-10 20-30 8-46-12 6-22 20-26 38"/>
@@ -26,7 +26,7 @@
 
     <!-- Cat badge -->
     <g transform="translate(1240,220)">
-      <circle cx="0" cy="0" r="58" fill="#F7FBFF" stroke="#ACCADD"/>
+      <circle cx="0" cy="0" r="58" fill="#F9FCFF" stroke="#C9DDEB"/>
       <circle cx="0" cy="4" r="28"/>
       <path d="M-20 -12l-18-24-2 32"/>
       <path d="M20 -12l18-24 2 32"/>
@@ -42,7 +42,7 @@
 
     <!-- Rabbit badge -->
     <g transform="translate(980,700)">
-      <circle cx="0" cy="0" r="56" fill="#F7FBFF" stroke="#ACCADD"/>
+      <circle cx="0" cy="0" r="56" fill="#F9FCFF" stroke="#C9DDEB"/>
       <circle cx="0" cy="10" r="26"/>
       <path d="M-10 -22c-3-26 6-46 18-50 12 6 16 30 10 56"/>
       <path d="M10 -22c3-26-6-46-18-50-12 6-16 30-10 56"/>
@@ -64,7 +64,7 @@
     </g>
   </g>
   <!-- Extra background details -->
-  <g fill="none" stroke="#ACCADD" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.35">
+  <g fill="none" stroke="#C9DDEB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.28">
     <!-- Soft clouds -->
     <path d="M520 120c-14-18-44-18-58 2-22-8-48 6-48 30 0 22 18 34 38 34h72c24 0 40-12 40-30 0-16-14-30-34-36"/>
     <path d="M1080 120c-12-16-40-16-52 2-20-8-44 6-44 28 0 20 16 30 34 30h64c22 0 36-10 36-26 0-14-12-26-28-34"/>
